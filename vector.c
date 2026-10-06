@@ -30,6 +30,7 @@ struct vector vectorSub(struct vector a, struct vector b) {
     resultVector.z = newZ;
 
     return resultVector;
+    printf("hellox2");
 }
 
 struct vector vectorMultiply(struct vector a, double scalar) {
