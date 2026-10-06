@@ -12,6 +12,7 @@ void initializeStorage(struct storage *storage) {
 
 int addVector(struct storage *storage, struct vector newVector) {
     int i;
+    printf("Hello");
 
     for (i=0; i < storage->count; i++) {
         if (storage->vectors[i].name == newVector.name) {
