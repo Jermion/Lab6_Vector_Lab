@@ -4,15 +4,17 @@
  * Description: the storage.c file that initializes the methods inside of storage.h
  **/
 
+#include <stdlib.h>
 #include "storage.h"
 
 void initializeStorage(struct storage *storage) {
+    storage->vectors = NULL;
     storage->count = 0;
+    storage->capacity = 0;
 }
 
 int addVector(struct storage *storage, struct vector newVector) {
     int i;
-    printf("Hello");
 
     for (i=0; i < storage->count; i++) {
         if (storage->vectors[i].name == newVector.name) {
@@ -21,14 +23,28 @@ int addVector(struct storage *storage, struct vector newVector) {
         }
     }
 
-    if (storage->count < maxStorage) {
-        storage->vectors[storage->count] = newVector;
-        storage->count++;
-        return 0;
-    } else {
-        // Storage is full
-        return 1;
-    }
+   if (storage->count == storage->capacity) {
+       int newCapacity;
+       struct vector *temp;
+
+       if (storage->capacity == 0) {
+           newCapacity = 4;
+       } else {
+           newCapacity = storage->capacity * 2;
+       }
+
+       temp = realloc(storage->vectors, newCapacity * sizeof(struct vector));
+
+       if (temp == NULL) {
+           return 1;
+       }
+
+       storage->vectors = temp;
+       storage->capacity = newCapacity;
+   }
+    storage->vectors[storage->count] = newVector;
+    storage->count++;
+    return 0;
 }
 
 int findVector(struct storage *storage, char name, struct vector *result) {
@@ -45,5 +61,8 @@ int findVector(struct storage *storage, char name, struct vector *result) {
 
 // Setting the count to 0, indicating 0 valid vectors stored
 void clearStorage(struct storage *storage) {
+    free(storage->vectors);
+    storage->vectors = NULL;
     storage->count = 0;
+    storage->capacity = 0;
 }
